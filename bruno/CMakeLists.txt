@@ -10,6 +10,7 @@ project(bruno)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
+  roslib
   std_msgs
   message_generation
   gazebo_msgs
@@ -109,10 +110,10 @@ add_service_files(
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES bruno
-#  CATKIN_DEPENDS roscpp rospy std_msgs
-#  DEPENDS system_lib
+  INCLUDE_DIRS include
+  LIBRARIES bruno
+  CATKIN_DEPENDS roscpp rospy std_msgs actionlib_msgs actionlib roslib
+  DEPENDS system_lib
 )
 
 ###########
