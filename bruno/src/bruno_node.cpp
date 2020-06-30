@@ -10,10 +10,13 @@
 
 int main(int argc, char **argv)
 {
+    // initialize and define node handle
     ros::init(argc, argv, "bruno_node");
     ros::NodeHandle bruno_node;
     std::string path = ros::package::getPath("bruno");
     const char* upath = path.c_str();
+    
+    //model spawner ---> should probaly use rosservice call.... eventually
     int spawn_count = 0;
     if (spawn_count==0)
     {
@@ -21,9 +24,11 @@ int main(int argc, char **argv)
         spawn_count = 1;
     }
 
+    // defines publisher <message type> (rostopic, queue size)
     ros::Publisher bruno_control = bruno_node.advertise<bruno::ModelState>("gazebo/set_model_state", 100);
+    // defines the update rate, which in this case is a parameter that affects 
     ros::Rate loop_rate(10);
-
+    //defines initial message variable as appropriate variable type, then sets initial world pose parameters
     bruno::ModelState state;
     state.model_name = "bruno";
     state.pose.position.x = 3.5;
@@ -34,6 +39,7 @@ int main(int argc, char **argv)
     int lap_half =1;
     while (ros::ok())
     {
+        // if statements that cause model to loop back and forth across a line
         if (state.pose.position.y > -6 && lap_half ==1)
         {
             state.pose.position.y = state.pose.position.y - 0.1;
@@ -54,6 +60,7 @@ int main(int argc, char **argv)
                 // state.pose.orientation.z = state.pose.orientation.z-1.57/2;
             }
         }
+        // publishes to node after pose states updates, and logs statuses, then repeats loop
         bruno_control.publish(state);
         ROS_INFO("pose received!");
         ROS_INFO("state published!");
